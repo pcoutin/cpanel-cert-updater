@@ -14,7 +14,7 @@ PASSWORD = 'cpanel_password'
 HOST = 'yourwebsite.com'
 ```
 
-Then run it, passing the paths to the certificate, key, and
+Then run it, passing the paths to the certificate, private key, and
 [CA bundle](https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem).
 
 ```
