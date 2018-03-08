@@ -1,0 +1,4 @@
+*.pyc
+cpanelconf.py
+*~
+__pycache__/
