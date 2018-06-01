@@ -21,6 +21,9 @@ it just redirects to the corresponding virtual host, and can have certificate
 validation problems. The FQDN of the virtual host can be found by SSHing into
 the shell account, and running `hostname -f`, or as above.
 
+To run this script in GoDaddy's shell account, it's necessary to install
+a newer version of Python with a newer OpenSSL, such as miniconda3.
+
 If you have already installed a certificate with the same private key and CA
 bundle, you can probably just pass the certificate.
 
