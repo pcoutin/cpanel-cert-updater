@@ -20,7 +20,7 @@ def install_ssl(cert_path, key_path=None, cabundle_path=None):
 
     ret = c.uapi('SSL', 'install_ssl', **ssl_args)
 
-    sys.stdout.buffer.write(str(ret))
+    print(str(ret).encode('utf-8'))
 
 
 def main(argv):
