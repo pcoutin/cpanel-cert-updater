@@ -9,3 +9,4 @@ cpanelapi = {git = "https://github.com/pcoutin/python-cpanelapi"}
 pip = "*"
 
 [dev-packages]
+ipython = "*"
