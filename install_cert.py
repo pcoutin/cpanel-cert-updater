@@ -1,25 +1,30 @@
 #!/usr/bin/env python
 
 import sys
-from cpanelconf import USER, HOST, PASSWORD
+from cpanelconf import USER, HOST, CPANEL_HOST, PASSWORD
 from cpanelapi import client
 
 
-def install_ssl(cert_path, key_path, cabundle_path):
-    c = client.Client(USER, HOST, password=PASSWORD, cpanel=True)
-    with open(cert_path, 'r') as cert_file, \
-         open(key_path, 'r') as key_file, \
-         open(cabundle_path, 'r') as cabundle_file:
-        cert = cert_file.read()
-        key = key_file.read()
-        cabundle = cabundle_file.read()
-        ret = c.uapi('SSL', 'install_ssl', domain=HOST, cert=cert,
-                     key=key, cabundle=cabundle)
-        print(ret)
+def install_ssl(cert_path, key_path=None, cabundle_path=None):
+    c = client.Client(USER, CPANEL_HOST, password=PASSWORD, cpanel=True)
+    ssl_args = {}
+
+    def try_read(fp, k):
+        if fp != None:
+            with open(fp, 'r') as f:
+                ssl_args[k] = f.read()
+
+    try_read(cert_path, 'cert')
+    try_read(key_path, 'key')
+    try_read(cabundle_path, 'cabundle')
+
+    ret = c.uapi('SSL', 'install_ssl', **ssl_args)
+
+    sys.stdout.buffer.write(str(ret))
 
 
 def main(argv):
-    return install_ssl(argv[0], argv[1], argv[2])
+    return install_ssl(*argv)
 
 
 if __name__ == '__main__':
