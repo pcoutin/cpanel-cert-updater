@@ -7,6 +7,7 @@ name = "pypi"
 requests = "*"
 cpanelapi = {git = "https://github.com/pcoutin/python-cpanelapi"}
 pip = "*"
+acme-tiny = "*"
 
 [dev-packages]
 ipython = "*"
