@@ -2,7 +2,7 @@
 
 import sys
 import pprint
-from cpanelconf import USER, HOST, CPANEL_HOST, PASSWORD
+from config import USER, HOST, CPANEL_HOST, PASSWORD
 from cpanelapi import client
 
 
