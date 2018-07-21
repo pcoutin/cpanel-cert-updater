@@ -16,10 +16,10 @@ def print_res(res):
 def install_ssl(cert_path, key_path=None, cabundle_path=None):
     ssl_args = {}
 
-    def try_read(fp, k):
-        if fp != None:
-            with open(fp, 'r') as f:
-                ssl_args[k] = f.read()
+    def try_read(file_path, key):
+        if file_path != None:
+            with open(file_path, 'r') as f:
+                ssl_args[key] = f.read()
 
     try_read(cert_path, 'cert')
     try_read(key_path, 'key')
