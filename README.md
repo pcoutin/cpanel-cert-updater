@@ -9,7 +9,10 @@ Should work with other CPanel hosts as well.
 (and how to max out your file count limit by installing miniconda3 - might
 be better to use OpenBSD's acme-client compiled statically with LibreSSL)
 
-TODO write better instructions
+TODO
+  - write better instructions
+  - look into removing old certificates from cpanel
+  - make sure updates didn't break anything
 
 First, log in (not to CPanel but to GoDaddy) and make sure SSH support is
 enabled. You may need to disable it and enable it again.
@@ -51,3 +54,5 @@ openssl req -new -sha256 -key domain.key -subj "/" -reqexts SAN -config <(cat /e
 
 You won't need to send the domain.key (your private key for TLS) after the
 first time setting/renewing the certificate, so you can unset `SERVER_KEY`.
+
+
