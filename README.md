@@ -1,33 +1,53 @@
 cpanel-cert-updater
 ===================
 
-This is a small script for setting TLS/SSL certificates in CPanel. It is meant
-for automatically renewing Let's Encrypt certificates with GoDaddy shared
-hosting.
+Automatically renews Let's Encrypt certificates for GoDaddy shared hosting.
+Should work with other CPanel hosts as well.
 
-A cpanelconf.py with contents like the following is needed:
+## How to get free Let's Encrypt TLS/HTTPS/X.509 certificates in GoDaddy
+
+(and how to max out your file count limit by installing miniconda3 - might
+be better to use OpenBSD's acme-client compiled statically with LibreSSL)
+
+TODO write better instructions
+
+First, log in (not to CPanel but to GoDaddy) and make sure SSH support is
+enabled. You may need to disable it and enable it again.
+
+SSH in and install miniconda3 in your home directory. The version of Python in
+the GoDaddy shell is ancient, as is OpenSSL.
+
+A config.py with contents like the following is needed:
 
 ```
 import socket
 
 USER = 'your_cpanel_user'
 PASSWORD = 'cpanel_password'
-HOST = 'yourwebsite.com'
+HOST = 'yoursite.com'
 CPANEL_HOST = socket.getfqdn()
+
+ACCOUNT_KEY = 'account.key'
+CSR = 'domain.csr'
+ACMEDIR = str(Path.home()) + '/public_html/.well-known/acme-challenge/'
+SERVER_KEY = 'domain.key'
+CABUNDLE = 'intermediate.pem'
 ```
 
-It is possible to connect to CPanel through https://yourwebsite.com:2083, but
-it just redirects to the corresponding virtual host, and can have certificate
-validation problems. The FQDN of the virtual host can be found by SSHing into
-the shell account, and running `hostname -f`, or as above.
-
-To run this script in GoDaddy's shell account, it's necessary to install
-a newer version of Python with a newer OpenSSL, such as miniconda3.
-
-If you have already installed a certificate with the same private key and CA
-bundle, you can probably just pass the certificate.
+It is possible to connect to CPanel through https://yoursite.com:2083, but
+it had certificate validation problems. The FullyQualifiedDomainName of the
+virtual host can be found by SSHing into the shell account and running
+`hostname -f`, or as above with `socket.getfqdn()`.
 
 ```
-pipenv run python install_cert.py path/to/signed.crt path/to/domain.key path/to/intermediate.pem
-pipenv run python install_cert.py path/to/signed.crt
+openssl genrsa 4096 > account.key
+openssl genrsa 4096 > domain.key
+curl https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt > intermediate.pem
+openssl req -new -sha256 -key domain.key -subj "/" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:yoursite.com,DNS:www.yoursite.com")) > domain.csr
+
+
+./renew_cert.sh
 ```
+
+You won't need to send the domain.key (your private key for TLS) after the
+first time setting/renewing the certificate, so you can unset `SERVER_KEY`.
