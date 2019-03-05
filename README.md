@@ -1,27 +1,32 @@
 cpanel-cert-updater
 ===================
 
-Automatically renews Let's Encrypt certificates for GoDaddy shared hosting.
-Should work with other CPanel hosts as well.
+Automatically renews free Let's Encrypt certificates for GoDaddy shared
+hosting.  Should work with other CPanel hosts as well.
 
 It uses [acme-tiny](https://github.com/diafygi/acme-tiny).
 
-## How to get free Let's Encrypt TLS/HTTPS/X.509 certificates in GoDaddy
-
-(and how to max out your file count limit by installing miniconda3 - might
-be better to use OpenBSD's acme-client compiled statically with LibreSSL)
+## How to automate Let's Encrypt TLS/HTTPS/X.509 certificate renewal for cPanel
 
 TODO
-  - write better instructions
-  - look into removing old certificates from cpanel
-  - make sure updates to dependencies didn't break anything
-  - don't try to set a certificate after failure
+
+  * delete previous installed certificate
+  * wildcard certificate?
+  * use docker, alpine, PyInstaller to automate bundling and deploying of a
+    single executable
 
 First, log in (not to CPanel but to GoDaddy) and make sure SSH support is
 enabled. You may need to disable it and enable it again.
 
-SSH in and install miniconda3 in your home directory. The version of Python in
+SSH in and install miniconda3 in ~/miniconda3. The version of Python in
 the GoDaddy shell is ancient, as is OpenSSL.
+
+You don't have to use pipenv, you can just run the following:
+
+```
+. ~/miniconda3/bin/activate
+pip install acme_tiny git+https://github.com/pcoutin/python-cpanelapi
+```
 
 A config.py with contents like the following is needed:
 
@@ -53,7 +58,7 @@ openssl req -new -sha256 -key domain.key -subj "/" -reqexts SAN -config <(cat /e
 ./renew_cert.sh
 ```
 
-You won't need to send the domain.key (your private key for TLS) after the
+It's unnecessary to send the domain.key (your private key for TLS) after the
 first time setting/renewing the certificate, so you can unset `SERVER_KEY`.
 
 Then you can run `renew_cert.sh` in a crontab.
