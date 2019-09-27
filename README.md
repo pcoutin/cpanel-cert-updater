@@ -1,6 +1,10 @@
 cpanel-cert-updater
 ===================
 
+note: potential vulns in old dependencies
+
+Should just use acme.sh
+
 Automatically renews free Let's Encrypt certificates for GoDaddy shared
 hosting.  Should work with other CPanel hosts as well.
 
